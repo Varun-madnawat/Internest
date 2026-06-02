@@ -6,9 +6,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import accuracy_score, roc_auc_score, classification_report
 import lightgbm as lgb
+import sqlite3
 
+connector = sqlite3.connect("Data/internships.db")
 
-data = pd.read_csv("data/internship.csv", encoding='latin1')
+data = pd.read_sql_query("SELECT * FROM internships", connector)
+
+connector.close()
 
 data['Sector_raw'] = data['Sector'].astype(str)
 data['location_raw'] = data['location'].astype(str)

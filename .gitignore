@@ -1,6 +1,7 @@
 # Python cache
 __pycache__/
 *.pyc
+Backend/__pycache__/
 
 # Virtual environments
 venv/
@@ -9,6 +10,7 @@ env/
 
 # Database
 *.db
+Backend/Data/internships.db
 
 # VS Code
 .vscode/
