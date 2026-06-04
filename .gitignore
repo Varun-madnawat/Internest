@@ -20,3 +20,5 @@ Backend/Output/output.json
 
 #exclude ppt
 *.pptx
+
+UI Format/

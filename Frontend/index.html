@@ -2,72 +2,197 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>InterNest</title>
-
-    <link rel="stylesheet"
-          href="style.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="InterNest — AI-powered internship recommender. Upload your resume and discover personalized internship opportunities matched to your skills.">
+    <title>InterNest — Find Your Perfect Internship</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
-<div class="container">
-
-    <h1>Welcome To InterNest</h1>
-
-    <form id="form">
-
-        <label>Skill:</label>
-        <input
-        id="skill"
-        type="text"
-        placeholder="Python">
-
-        <label>Sector:</label>
-        <input
-        id="sector"
-        type="text"
-        placeholder="AI">
-
-        <label>Location:</label>
-        <input
-        id="location"
-        type="text"
-        placeholder="Delhi">
-
-
-        <button type="submit">
-
-            Find Internships
-
-        </button>
-
-    </form>
-
-
-    <div class="result">
-
-        <h2>
-        Recommended Internships
-        </h2>
-
-        <div id="output">
-
-            No recommendations yet
-
-        </div>
-
+    <!-- ── Animated background particles ── -->
+    <div class="bg-particles" aria-hidden="true">
+        <div class="particle particle--1"></div>
+        <div class="particle particle--2"></div>
+        <div class="particle particle--3"></div>
+        <div class="particle particle--4"></div>
+        <div class="particle particle--5"></div>
     </div>
 
-</div>
+    <!-- ── Navbar ── -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar__brand">
+            <svg class="navbar__logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="32" height="32" rx="8" fill="url(#logo-grad)" />
+                <path d="M10 22V12L16 8L22 12V22L16 18L10 22Z" fill="white" fill-opacity="0.9" />
+                <path d="M16 18L22 22V12L16 8V18Z" fill="white" fill-opacity="0.6" />
+                <defs>
+                    <linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32">
+                        <stop stop-color="#6366f1" />
+                        <stop offset="1" stop-color="#a855f7" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span class="navbar__name">InterNest</span>
+        </div>
+        <div class="navbar__links">
+            <a href="#search-section" class="navbar__link">Search</a>
+            <a href="#results-section" class="navbar__link">Results</a>
+        </div>
+    </nav>
 
-<script src="script.js"></script>
+    <!-- ── Hero ── -->
+    <header class="hero">
+        <div class="hero__content">
+            <h1 class="hero__title">
+                Land the <span class="hero__gradient-text">internship</span> you actually want
+            </h1>
+            <p class="hero__subtitle">
+                Drop your resume or tell us what you're good at we'll dig through thousands of listings and find the ones worth your time.
+            </p>
+            <a href="#search-section" class="hero__cta">
+                Let's Go
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </a>
+        </div>
+        <div class="hero__visual" aria-hidden="true">
+            <div class="hero__orb hero__orb--1"></div>
+            <div class="hero__orb hero__orb--2"></div>
+            <div class="hero__orb hero__orb--3"></div>
+        </div>
+    </header>
 
+    <!-- ── Search Section ── -->
+    <main>
+        <section class="search-section" id="search-section">
+            <div class="section__header">
+                <h2 class="section__title">What are you looking for?</h2>
+                <p class="section__desc">Fill in a few details, or just upload your resume and we'll handle the rest.</p>
+            </div>
+
+            <form id="form" class="search-form" autocomplete="off">
+                <div class="form-grid">
+                    <!-- Skills -->
+                    <div class="form-group">
+                        <label for="skill" class="form-label">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                                <path d="M2 17l10 5 10-5" />
+                                <path d="M2 12l10 5 10-5" />
+                            </svg>
+                            Skills
+                        </label>
+                        <input id="skill" type="text" class="form-input"
+                            placeholder="e.g. Python, React, Machine Learning">
+                    </div>
+
+                    <!-- Sector -->
+                    <div class="form-group">
+                        <label for="sector" class="form-label">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                                <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+                            </svg>
+                            Sector
+                        </label>
+                        <input id="sector" type="text" class="form-input"
+                            placeholder="e.g. Web Development, Data Science">
+                    </div>
+
+                    <!-- Location -->
+                    <div class="form-group">
+                        <label for="location" class="form-label">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                            Location
+                        </label>
+                        <input id="location" type="text" class="form-input" placeholder="e.g. Bangalore, Delhi, Remote">
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="form-divider">
+                    <span class="form-divider__line"></span>
+                    <span class="form-divider__text">or upload resume</span>
+                    <span class="form-divider__line"></span>
+                </div>
+
+                <!-- Upload Zone -->
+                <div class="upload-zone" id="uploadZone">
+                    <input type="file" id="resume" accept=".pdf,.docx" hidden>
+                    <div class="upload-zone__icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="12" y1="18" x2="12" y2="12" />
+                            <polyline points="9 15 12 12 15 15" />
+                        </svg>
+                    </div>
+                    <p class="upload-zone__title">Drop your resume here, or click to browse</p>
+                    <p class="upload-zone__hint">PDF or DOCX works</p>
+                    <p class="upload-zone__filename" id="fileName"></p>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <span class="btn-submit__text">Show Me What's Out There</span>
+                    <svg class="btn-submit__icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                    <div class="btn-submit__loader" id="submitLoader">
+                        <div class="spinner"></div>
+                    </div>
+                </button>
+            </form>
+        </section>
+
+        <!-- ── Results Section ── -->
+        <section class="results-section" id="results-section">
+            <div class="section__header">
+                <h2 class="section__title">Here's what we found</h2>
+                <p class="section__desc" id="resultsDesc">Your matches will show up right here once you search.</p>
+            </div>
+
+            <div class="results-grid" id="output">
+                <!-- Empty state -->
+                <div class="empty-state" id="emptyState">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        stroke-linecap="round" stroke-linejoin="round" opacity="0.3">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        <line x1="8" y1="11" x2="14" y2="11" />
+                    </svg>
+                    <p>Nothing here yet</p>
+                    <span>Tell us your skills and we'll find internships that fit</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ── Footer ── -->
+    <footer class="footer">
+        <div class="footer__inner">
+            <p class="footer__text">© 2026 InterNest</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
+
 </html>
