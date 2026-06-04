@@ -22,3 +22,4 @@ Backend/Output/output.json
 *.pptx
 
 UI Format/
+* text=auto
