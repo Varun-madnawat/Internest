@@ -46,10 +46,10 @@ uploadZone.addEventListener("drop", function (e) {
 // ── Handle file selection & auto-parse ──────────────────
 function handleFile(file) {
     const ext = file.name.split(".").pop().toLowerCase();
-    const validExts = ["pdf", "docx"];
+    const validExts = ["pdf"];
 
     if (!validExts.includes(ext)) {
-        fileNameEl.textContent = "❌ Invalid file type — use PDF or DOCX";
+        fileNameEl.textContent = "❌ Invalid file type — use PDF";
         fileNameEl.style.color = "var(--clr-error)";
         uploadZone.classList.remove("file-selected");
         selectedFile = null;
