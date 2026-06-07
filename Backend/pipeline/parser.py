@@ -21,10 +21,8 @@ def extract_text_pdf(user_file):
                 
     return text_in_file
 
-
 def extract_text(user_file):
     if user_file.endswith('.pdf'):
         return extract_text_pdf(user_file)
     
     return ""
-

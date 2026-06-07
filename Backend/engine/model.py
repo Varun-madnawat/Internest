@@ -8,7 +8,7 @@ from sklearn.metrics import accuracy_score, roc_auc_score, classification_report
 import lightgbm as lgb
 import sqlite3
 
-connector = sqlite3.connect("Data/internships.db")
+connector = sqlite3.connect("data/internships.db")
 
 data = pd.read_sql_query("SELECT * FROM internships", connector)
 
@@ -97,7 +97,3 @@ def predict_internships(skills, sector, location):
         'score': 'Match Score'
     }
     return top_internships[columns_to_show].rename(columns=mapping).to_dict(orient='records')
-
-
-
-

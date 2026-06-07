@@ -2,7 +2,7 @@ import sqlite3
 import re
 
 def extract_skills_from_db():
-    connection = sqlite3.connect(r"Data/internships.db")
+    connection = sqlite3.connect(r"data/internships.db")
 
     cursor  = connection.cursor()
 

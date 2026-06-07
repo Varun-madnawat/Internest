@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from recommender import get_recommendations
+from engine import get_recommendations
 
 class UserInput(BaseModel):
     skills : str

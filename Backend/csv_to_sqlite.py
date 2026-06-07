@@ -10,12 +10,12 @@ Work Flow:
 
 #Step 1:
 
-data = pd.read_csv("Data/internship.csv", 
+data = pd.read_csv("data/internship.csv", 
                    encoding="latin-1"
                    )
 
 #Step 2:
-connection = sqlite3.connect("Data/internships.db")
+connection = sqlite3.connect("data/internships.db")
 
 #Step 3:
 

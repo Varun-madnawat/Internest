@@ -2,6 +2,8 @@
 __pycache__/
 *.pyc
 Backend/__pycache__/
+Backend/engine/__pycache__/
+Backend/pipeline/__pycache__/
 
 # Virtual environments
 venv/
@@ -10,13 +12,13 @@ env/
 
 # Database
 *.db
-Backend/Data/internships.db
+Backend/data/internships.db
 
 # VS Code
 .vscode/
 
 # Output files
-Backend/Output/output.json
+Backend/output/output.json
 
 #exclude ppt
 *.pptx
