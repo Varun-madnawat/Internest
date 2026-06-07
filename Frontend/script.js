@@ -57,31 +57,10 @@ function handleFile(file) {
     }
 
     selectedFile = file;
-    fileNameEl.textContent = "⏳ Parsing " + file.name + "…";
-    fileNameEl.style.color = "var(--clr-primary-lt)";
+
+    fileNameEl.textContent = "✅ " + file.name;
+    fileNameEl.style.color = "var(--clr-success)";
     uploadZone.classList.add("file-selected");
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    fetch("http://127.0.0.1:8000/parse-resume", {
-        method: "POST",
-        body: formData,
-    })
-        .then((res) => res.json())
-        .then((data) => {
-            fileNameEl.textContent = "✅ " + file.name;
-            fileNameEl.style.color = "var(--clr-success)";
-
-            if (data.skills)   autoFill("skill", data.skills);
-            if (data.sector)   autoFill("sector", data.sector);
-            if (data.location) autoFill("location", data.location);
-        })
-        .catch((err) => {
-            console.error(err);
-            fileNameEl.textContent = "✅ " + file.name + " (auto-fill unavailable)";
-            fileNameEl.style.color = "var(--clr-warning)";
-        });
 }
 
 // ── Auto-fill with highlight animation ──────────────────
@@ -94,54 +73,88 @@ function autoFill(id, value) {
 
 // ── Form submission ─────────────────────────────────────
 form.addEventListener("submit", async function (e) {
-    e.preventDefault();
+e.preventDefault();
+submitBtn.classList.add("loading");
+submitBtn.disabled = true;
 
-    const skill    = document.getElementById("skill").value.trim();
-    const sector   = document.getElementById("sector").value.trim();
+try {
+
+    // Parse resume only when Submit is clicked
+    if (selectedFile) {
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+
+        const parseResponse = await fetch(
+            "http://127.0.0.1:8000/parse-resume",
+            {
+                method: "POST",
+                body: formData,
+            }
+        );
+
+        const parsedData = await parseResponse.json();
+
+        if (parsedData.skills)
+            document.getElementById("skill").value = parsedData.skills;
+
+        if (parsedData.sector)
+            document.getElementById("sector").value = parsedData.sector;
+
+        if (parsedData.location)
+            document.getElementById("location").value = parsedData.location;
+    }
+
+    const skill = document.getElementById("skill").value.trim();
+    const sector = document.getElementById("sector").value.trim();
     const location = document.getElementById("location").value.trim();
 
     if (!skill || !sector || !location) {
-        showStatus("We need all three fields filled in — Skills, Sector, and Location.", true);
+        showStatus(
+            "We need all three fields filled in — Skills, Sector, and Location.",
+            true
+        );
         return;
     }
 
-    // Show loading state
-    submitBtn.classList.add("loading");
-    submitBtn.disabled = true;
+    const response = await fetch("http://127.0.0.1:8000/recommend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            skills: skill,
+            sector: sector,
+            location: location
+        }),
+    });
 
-    try {
-        const response = await fetch("http://127.0.0.1:8000/recommend", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ skills: skill, sector: sector, location: location }),
-        });
+    const data = await response.json();
 
-        const data = await response.json();
+    outputEl.innerHTML = "";
 
-        outputEl.innerHTML = "";
+    if (!data || data.length === 0) {
+        showStatus(
+            "Hmm, nothing matched that combination. Try tweaking your search a bit."
+        );
+        return;
+    }
 
-        if (!data || data.length === 0) {
-            showStatus("Hmm, nothing matched that combination. Try tweaking your search a bit.");
-            return;
-        }
+    resultsDesc.textContent =
+        `Here are ${data.length} internship${data.length > 1 ? "s" : ""} that look like a good fit.`;
 
-        resultsDesc.textContent = `Here are ${data.length} internship${data.length > 1 ? "s" : ""} that look like a good fit.`;
+    data.forEach((intern, i) => {
+        const card = document.createElement("div");
+        card.className = "card";
 
-        data.forEach((intern, i) => {
-            const card = document.createElement("div");
-            card.className = "card";
+        const stipendDisplay = intern.Stipend
+            ? escapeHtml(intern.Stipend).replace(/\?\s*/g, "₹")
+            : `₹${formatNum(intern["Min Stipend"])} – ₹${formatNum(intern["Max Stipend"])}`;
 
-            // Use raw stipend text when available, else format from min/max
-            const stipendDisplay = intern.Stipend
-                ? escapeHtml(intern.Stipend).replace(/\?\s*/g, '₹')
-                : `₹${formatNum(intern["Min Stipend"])} – ₹${formatNum(intern["Max Stipend"])}`;
+        const startDate = intern["Start Date"] || "—";
 
-            const startDate = intern["Start Date"] || "—";
-            const duration  = intern["Duration (months)"] != null
-                ? `${intern["Duration (months)"]} Months`
-                : "—";
+        const duration = intern["Duration (months)"] != null
+            ? `${intern["Duration (months)"]} Months`
+            : "—";
 
-            card.innerHTML = `
+        card.innerHTML = `
                 <div class="card__rank">#${i + 1}</div>
                 <h3 class="card__company">${escapeHtml(intern.Company || "Unknown Company")}</h3>
                 <div class="card__details">
@@ -192,20 +205,28 @@ form.addEventListener("submit", async function (e) {
                     </div>
                 </div>
             `;
-            outputEl.appendChild(card);
-        });
 
-        // Smooth scroll to results
-        document.getElementById("results-section").scrollIntoView({ behavior: "smooth" });
+        outputEl.appendChild(card);
+    });
 
-    } catch (error) {
-        console.error(error);
-        showStatus("Can't reach the server right now. Make sure the backend is running and try again.", true);
-    } finally {
-        submitBtn.classList.remove("loading");
-        submitBtn.disabled = false;
-    }
+    document
+        .getElementById("results-section")
+        .scrollIntoView({ behavior: "smooth" });
+
+} catch (error) {
+    console.error(error);
+    showStatus(
+        "Can't reach the server right now. Make sure the backend is running and try again.",
+        true
+    );
+} finally {
+    submitBtn.classList.remove("loading");
+    submitBtn.disabled = false;
+}
+
+
 });
+
 
 // ── Helpers ─────────────────────────────────────────────
 function showStatus(msg, isError = false) {

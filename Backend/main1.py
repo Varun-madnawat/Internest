@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from engine import get_recommendations
+"""from engine import get_recommendations"""
 from fastapi import UploadFile, File
 from pipeline.parser import parse_resume
 
@@ -25,24 +25,12 @@ def home():
 
 
 
-@app.post("/parse-resume")
+"""@app.post("/parse-resume")
 async def parse_resume_route(file: UploadFile = File(...)):
-
-    filepath = file.filename
-
-    with open(filepath, "wb") as f:
-        f.write(await file.read())
-
-    data = parse_resume(filepath)
-
-    print(data)
-
-    return {
-        "status": "success",
-        "lines_found": len(data)
-    }    
+    print("ROUTE HIT")
+    return {"status": "success"}     
 
 @app.post("/recommend")
 def recommend(user : UserInput):
     recommendations = get_recommendations(user.skills, user.sector, user.location)
-    return recommendations
+    return recommendations"""
