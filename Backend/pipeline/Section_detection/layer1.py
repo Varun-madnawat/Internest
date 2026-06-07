@@ -65,10 +65,3 @@ def body_font_lines(lines):
     sizes = [round(line['font_size']) for line in lines]
     return Counter(sizes).most_common(1)[0][0]
 
-
-if __name__ == "__main__":
-    import sys
-    lines = styled_text(r"Backend\Varun Madnawat_dA.pdf")
-    body_size = body_font_lines(lines)
-    print(body_size)
-    print(lines)
